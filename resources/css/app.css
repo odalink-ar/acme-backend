@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* Paginación minimalista */
+.pagination-minimal .page-link {
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    padding: 0.25rem 0.55rem;
+    min-width: 1.9rem;
+    text-align: center;
+    font-size: 0.78rem;
+    line-height: 1.2;
+    color: #0f172a;
+    background-color: #ffffff;
+    transition: all 0.15s ease;
+}
+
+.pagination-minimal .page-item + .page-item .page-link {
+    margin-left: 0.25rem;
+}
+
+.pagination-minimal .page-link:hover {
+    border-color: rgba(15, 23, 42, 0.18);
+    background-color: #f9fafb;
+    text-decoration: none;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+}
+
+.pagination-minimal .page-item.active .page-link {
+    border-color: rgba(15, 23, 42, 0.9);
+    background-color: #0f172a;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
+}
+
+.pagination-minimal .page-item.disabled .page-link {
+    color: #9ca3af;
+    border-color: rgba(148, 163, 184, 0.25);
+    background-color: #f9fafb;
+    box-shadow: none;
+}
+
+.pagination-minimal {
+    gap: 0.15rem;
+}
