@@ -16,12 +16,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            "name" => "Administrador",
-            "email" => "admin@acme.com",
-            "password" => Hash::make("admin123"),
-        ]);
+        $this->call(AclSeeder::class);
     }
 }

@@ -70,10 +70,10 @@
                     <tbody>
                         @forelse($roles as $role)
                             <tr>
-                                <td class="small text-muted">{{ $role->id }}</td>
-                                <td>{{ $role->name }}</td>
-                                <td class="text-muted small">{{ $role->guard_name }}</td>
-                                <td>
+                                <td class="small text-muted" data-label="ID">{{ $role->id }}</td>
+                                <td data-label="Nombre">{{ $role->name }}</td>
+                                <td class="text-muted small" data-label="Guard">{{ $role->guard_name }}</td>
+                                <td data-label="Permisos">
                                     @php $permCount = $role->permissions->count(); @endphp
                                     @if($permCount > 0)
                                         <span class="role-pill">
@@ -83,7 +83,7 @@
                                         <span class="text-muted small">Sin permisos</span>
                                     @endif
                                 </td>
-                                <td class="text-end">
+                                <td class="text-end" data-label="Acciones">
                                     <div class="d-flex justify-content-end gap-2 align-items-center role-actions">
                                         <a href="{{ route('admin.roles.show', $role) }}" class="btn btn-sm btn-outline-secondary">Ver</a>
                                         <a href="{{ route('admin.roles.edit', $role) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
@@ -106,8 +106,13 @@
                 </table>
             </div>
 
-            <div class="p-3">
-                {{ $roles->links() }}
+            <div class="pagination-footer mt-2 d-flex flex-column align-items-center gap-1">
+                @if($roles->hasPages())
+                    <div class="text-muted small">
+                        Mostrando {{ $roles->firstItem() }}–{{ $roles->lastItem() }} de {{ $roles->total() }} roles
+                    </div>
+                    {{ $roles->links() }}
+                @endif
             </div>
         </div>
     </div>
@@ -172,7 +177,9 @@
 
     .role-actions .btn {
         border-radius: 999px;
-        padding-inline: 0.9rem;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        line-height: 1.1;
     }
     .user-filter-card {
         border-radius: 16px;
@@ -194,5 +201,69 @@
     .user-filter-card .btn {
         border-radius: 999px;
     }    
+
+    .pagination-footer {
+        padding: 0.5rem 0.75rem 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+        .roles-table thead {
+            display: none;
+        }
+
+        .roles-table tbody {
+            display: block;
+        }
+
+        .roles-table tbody tr {
+            display: block;
+            margin-bottom: 0.75rem;
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background-color: #ffffff;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+            transform: none !important;
+        }
+
+        .roles-table tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 0;
+            border-bottom: 0;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+
+        .roles-table tbody td::before {
+            content: attr(data-label);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+            margin-right: 0.75rem;
+        }
+
+        .roles-table tbody tr:hover {
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+            background-color: #ffffff !important;
+        }
+
+        .roles-table tbody td:last-child {
+            padding-top: 0.4rem;
+        }
+
+        .role-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.4rem;
+        }
+
+        .role-actions .btn {
+            width: 100%;
+            padding: 0.35rem 0.5rem;
+            font-size: 0.75rem;
+        }
+    }
 </style>
 @endsection

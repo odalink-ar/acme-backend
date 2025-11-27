@@ -114,17 +114,33 @@
 <style>
     .role-create-card {
         border-radius: 18px;
-        border: 1px solid rgba(15, 23, 42, 0.04);
+        border: 1px solid rgba(148, 163, 184, 0.18);
         background-color: #ffffff;
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
     }
 
     .role-create-card .card-title {
-        font-weight: 500;
-        letter-spacing: 0.01em;
+        font-weight: 600;
+        font-size: 0.8rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #6b7280;
+        margin-bottom: 0.25rem;
     }
 
     .role-create-card .form-label {
         color: #4b5563;
+    }
+
+    .role-create-card .form-control {
+        border-radius: 999px;
+        border-color: rgba(148, 163, 184, 0.6);
+        font-size: 0.84rem;
+    }
+
+    .role-create-card .form-control:focus {
+        border-color: #111827;
+        box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.12);
     }
 
     .permissions-panel {
@@ -133,8 +149,8 @@
         width: 100%;
         scrollbar-width: thin;
         scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
-        background-color: #ffffff;
-        border-color: rgba(148, 163, 184, 0.35);
+        background-color: #f9fafb;
+        border-color: rgba(148, 163, 184, 0.3);
     }
 
     .permissions-panel::-webkit-scrollbar {
@@ -148,6 +164,12 @@
     .permissions-panel::-webkit-scrollbar-thumb {
         background-color: rgba(0, 0, 0, 0.18);
         border-radius: 999px;
+    }
+
+    .role-create-card .btn {
+        border-radius: 999px;
+        font-size: 0.85rem;
+        padding: 0.35rem 1.1rem;
     }
 </style>
 @endsection

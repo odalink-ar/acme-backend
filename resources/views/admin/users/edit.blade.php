@@ -31,7 +31,7 @@
                         Volver
                     </a>
                     <button type="submit" class="btn btn-dark">
-                        Guardar cambios
+                        Guardar
                     </button>
                 </div>
             </form>

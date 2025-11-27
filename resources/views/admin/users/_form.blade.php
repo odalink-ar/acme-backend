@@ -118,27 +118,31 @@
     {{-- ROLES --}}
     <div class="card shadow-sm border-0">
         <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
+            <div class="d-flex justify-content-between align-items-center mb-2 gap-2">
                 <div>
                     <h5 class="card-title mb-1">Roles</h5>
                     <p class="text-muted small mb-0">
-                        Seleccioná uno o más roles. Cada rol trae un conjunto de permisos por defecto.
+                        Usá los roles como agrupadores de permisos. Podés ajustar detalles desde la sección de permisos.
                     </p>
                 </div>
-                <div class="text-end">
-                    <span class="badge bg-light text-muted border small">
+                <div class="d-flex flex-column align-items-end">
+                    <span class="badge bg-light text-muted border small mb-1">
                         <span x-text="activeRoleIds.length"></span>
-                        <span>/ {{ $roles->count() }}</span>
+                        <span>/ {{ $roles->count() }} roles</span>
                     </span>
                 </div>
             </div>
 
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2 mt-2">
+            <div class="row g-2 mt-1">
                 @forelse($roles as $role)
-                    <div class="col">
-                        <div class="form-check">
+                    <div class="col-6 col-md-6 col-lg-2">
+                        <label
+                            class="role-option w-100"
+                            :class="activeRoleIds.includes('{{ (string) $role->id }}') ? 'is-active' : ''"
+                            for="role_{{ $role->id }}"
+                        >
                             <input
-                                class="form-check-input"
+                                class="form-check-input d-none"
                                 type="checkbox"
                                 name="roles[]"
                                 value="{{ $role->id }}"
@@ -146,10 +150,15 @@
                                 @checked(in_array($role->id, $selectedRoles))
                                 @change="onRoleToggle({{ $role->id }}, $event.target.checked)"
                             >
-                            <label class="form-check-label small" for="role_{{ $role->id }}">
-                                {{ $role->name }}
-                            </label>
-                        </div>
+                            <div class="role-option-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="role-option-name">{{ $role->name }}</span>
+                                    <span class="badge bg-light text-muted border small">
+                                        {{ $role->permissions->count() }} perm.
+                                    </span>
+                                </div>
+                            </div>
+                        </label>
                     </div>
                 @empty
                     <div class="col-12">
@@ -386,7 +395,11 @@
                 }
             },
             addAll() {
-                this.available.forEach((perm) => {
+                const source = this.searchAvailable && this.searchAvailable.trim().length
+                    ? this.filteredAvailable
+                    : this.available;
+
+                source.forEach((perm) => {
                     if (!this.directIds.includes(perm.id)) {
                         this.directIds.push(perm.id);
                     }
@@ -399,9 +412,19 @@
             },
 
             clearSelected() {
-                this.directIds = [];
-            },
+                const hasFilter = this.searchSelected && this.searchSelected.trim().length;
 
+                // Si no hay filtro, limpiamos todos los permisos adicionales
+                if (!hasFilter) {
+                    this.directIds = [];
+                    return;
+                }
+
+                // Si hay filtro, quitamos solo los adicionales visibles (filtrados)
+                const idsToRemove = this.filteredSelectedExtras.map((p) => p.id);
+
+                this.directIds = this.directIds.filter((id) => !idsToRemove.includes(id));
+            },
             onRoleToggle(roleId, isChecked) {
                 const key = String(roleId);
                 if (isChecked) {
@@ -458,8 +481,9 @@
 
     .user-access-form .card {
         border-radius: 16px;
-        border: 1px solid rgba(15, 23, 42, 0.04);
+        border: 1px solid rgba(148, 163, 184, 0.18);
         background-color: #ffffff;
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
     }
 
     .user-access-form .card-body {
@@ -467,9 +491,111 @@
     }
 
     .user-access-form .card-title {
+        font-weight: 600;
+        font-size: 0.8rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #6b7280;
+        margin-bottom: 0.25rem;
+    }
+
+    .user-access-form .role-option {
+        display: block;
+        padding: 0.55rem 0.75rem;
+        border-radius: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        background-color: #f9fafb;
+        cursor: pointer;
+        transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .user-access-form .role-option:hover {
+        background-color: #f3f4f6;
+        border-color: rgba(148, 163, 184, 0.7);
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    }
+
+    .user-access-form .role-option.is-active {
+        border-color: #111827;
+        background-color: #111827;
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.18);
+    }
+
+    .user-access-form .role-option.is-active .role-option-name,
+    .user-access-form .role-option.is-active .role-option-meta {
+        color: #f9fafb;
+    }
+
+    .user-access-form .role-option.is-active .badge {
+        background-color: rgba(249, 250, 251, 0.1);
+        color: #e5e7eb;
+        border-color: rgba(249, 250, 251, 0.2);
+    }
+
+    .user-access-form .role-option-name {
+        font-size: 0.85rem;
         font-weight: 500;
-        letter-spacing: 0.01em;
-        margin-bottom: 0.35rem;
+        color: #111827;
+    }
+
+    .user-access-form .role-option-meta {
+        font-size: 0.78rem;
+    }
+    .user-access-form .form-control {
+        border-radius: 999px;
+        border-color: rgba(148, 163, 184, 0.6);
+        font-size: 0.84rem;
+    }
+
+    .user-access-form .form-control:focus {
+        border-color: #111827;
+        box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.12);
+    }
+    .user-access-form .form-check {
+        padding: 0.15rem 0.4rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        background-color: transparent;
+        transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .user-access-form .form-check-input {
+        width: 0.8rem;
+        height: 0.8rem;
+        margin-top: 0.15rem;
+        margin-right: 0.35rem;
+        box-shadow: none;
+    }
+
+    .user-access-form .form-check-input:checked {
+        background-color: #111827;
+        border-color: #111827;
+    }
+
+    .user-access-form .form-check:hover {
+        background-color: #f3f4f6;
+        border-color: rgba(148, 163, 184, 0.4);
+    }
+
+    .user-access-form .form-check-label.small {
+        font-size: 0.8rem;
+        color: #374151;
+    }
+    .user-access-form .btn.btn-outline-secondary {
+        border-radius: 999px;
+        border-color: rgba(148, 163, 184, 0.6);
+        font-size: 0.78rem;
+    }
+
+    .user-access-form .btn.btn-outline-secondary:hover:not(:disabled) {
+        background-color: #111827;
+        color: #ffffff;
+        border-color: #111827;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
+    }
+
+    .user-access-form .btn.btn-outline-secondary:disabled {
+        opacity: 0.45;
     }
 
     .user-access-form .form-label {
@@ -499,8 +625,8 @@
     }
 
     .user-access-form .permissions-panel {
-        border-color: rgba(148, 163, 184, 0.35);
-        background-color: #ffffff;
+        border-color: rgba(148, 163, 184, 0.3);
+        background-color: #f9fafb;
     }
 
     .user-access-form .form-control-sm {
@@ -511,4 +637,9 @@
         padding: 0.15rem 0.45rem;
         font-size: 0.7rem;
     }    
+   .btn {
+        border-radius: 999px;
+        font-size: 0.85rem;
+        padding: 0.35rem 1.1rem;
+    } 
 </style>

@@ -23,7 +23,7 @@ class UsersController extends Controller
                 });
             })
             ->orderBy('id', 'desc')
-            ->paginate(15)
+            ->paginate(50)
             ->withQueryString();
 
         return view('admin.users.index', compact('users'));

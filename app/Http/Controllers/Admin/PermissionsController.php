@@ -19,7 +19,7 @@ class PermissionsController extends Controller
                     ->orWhere("guard_name", "like", "%{$search}%");
             })
             ->orderBy("name")
-            ->paginate(10)
+            ->paginate(50)
             ->withQueryString(); // mantiene ?search en la paginación
 
         return view("admin.permissions.index", [

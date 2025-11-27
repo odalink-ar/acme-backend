@@ -71,10 +71,10 @@
                     <tbody>
                         @forelse($users as $user)
                             <tr>
-                                <td class="small text-muted">{{ $user->id }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td class="text-muted small">{{ $user->email }}</td>
-                                <td>
+                                <td class="small text-muted" data-label="ID">{{ $user->id }}</td>
+                                <td data-label="Nombre">{{ $user->name }}</td>
+                                <td class="text-muted small" data-label="Email">{{ $user->email }}</td>
+                                <td data-label="Roles">
                                     @php $roleCount = $user->roles->count(); @endphp
                                     @if($roleCount > 0)
                                         <span class="user-pill">
@@ -84,7 +84,7 @@
                                         <span class="text-muted small">Sin roles</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td data-label="Permisos">
                                     @php $permCount = $user->permissions->count(); @endphp
                                     @if($permCount > 0)
                                         <span class="user-pill user-pill-soft">
@@ -94,7 +94,7 @@
                                         <span class="text-muted small">Sin permisos</span>
                                     @endif
                                 </td>
-                                <td class="text-end">
+                                <td class="text-end" data-label="Acciones">
                                     <div class="d-flex justify-content-end gap-2 align-items-center user-actions">
                                         <a href="{{ route('admin.users.show', $user) }}" class="btn btn-sm btn-outline-secondary">
                                             Ver
@@ -128,8 +128,10 @@
                 </table>
             </div>
 
-            <div class="p-3">
-                {{ $users->links() }} {{-- Si querés Bootstrap: Paginator::useBootstrapFive() en AppServiceProvider --}}
+            <div class="pagination-footer mt-2 d-flex flex-column align-items-center gap-1">
+                @if($users->hasPages())
+                    {{ $users->links() }}
+                @endif
             </div>
         </div>
     </div>
@@ -196,7 +198,9 @@
 
     .user-actions .btn {
         border-radius: 999px;
-        padding-inline: 0.9rem;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        line-height: 1.1;
     }
 
     .user-filter-card {
@@ -218,6 +222,71 @@
 
     .user-filter-card .btn {
         border-radius: 999px;
+    }
+</style>
+<style>
+    .pagination-footer {
+        padding: 0.5rem 0.75rem 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+        .user-table thead {
+            display: none;
+        }
+
+        .user-table tbody {
+            display: block;
+        }
+
+        .user-table tbody tr {
+            display: block;
+            margin-bottom: 0.75rem;
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background-color: #ffffff;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+            transform: none !important;
+        }
+
+        .user-table tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 0;
+            border-bottom: 0;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+
+        .user-table tbody td::before {
+            content: attr(data-label);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+            margin-right: 0.75rem;
+        }
+
+        .user-table tbody tr:hover {
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+            background-color: #ffffff !important;
+        }
+
+        .user-table tbody td:last-child {
+            padding-top: 0.4rem;
+        }
+
+        .user-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem;
+        }
+
+        .user-actions .btn {
+            width: 100%;
+            padding: 0.35rem 0.5rem;
+            font-size: 0.75rem;
+        }
     }
 </style>
 @endsection

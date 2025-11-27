@@ -21,7 +21,7 @@ class RolesController extends Controller
                 });
             })
             ->orderBy('name')
-            ->paginate(10)
+            ->paginate(50)
             ->withQueryString();
 
         return view('admin.roles.index', compact('roles', 'search'));

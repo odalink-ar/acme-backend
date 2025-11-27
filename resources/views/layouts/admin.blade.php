@@ -7,12 +7,12 @@
 
     {{-- Bootstrap 5 --}}
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        href="{{ asset('assets/acme/css/bootstrap.min.css') }}"
         rel="stylesheet"
     >
 
     {{-- Alpine.js --}}
-    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="{{ asset('assets/acme/js/alpine.js') }}" defer></script>
 <style>
     .page-link {
         color: #111827 !important;
@@ -167,7 +167,7 @@
 </main>
 
 <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    src="{{ asset('assets/acme/js/bootstrap.bundle.min.js') }}">
 </script>
 </body>
 </html>

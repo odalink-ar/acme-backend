@@ -69,10 +69,10 @@
                     <tbody>
                         @forelse($permissions as $permission)
                             <tr>
-                                <td class="small text-muted">{{ $permission->id }}</td>
-                                <td>{{ $permission->name }}</td>
-                                <td class="text-muted small">{{ $permission->guard_name }}</td>
-                                <td class="text-end">
+                                <td class="small text-muted" data-label="ID">{{ $permission->id }}</td>
+                                <td data-label="Nombre">{{ $permission->name }}</td>
+                                <td class="text-muted small" data-label="Guard">{{ $permission->guard_name }}</td>
+                                <td class="text-end" data-label="Acciones">
                                     <div class="d-flex justify-content-end gap-2 align-items-center permission-actions">
                                         <a href="{{ route('admin.permissions.show', $permission) }}" class="btn btn-sm btn-outline-secondary">Ver</a>
                                         <a href="{{ route('admin.permissions.edit', $permission) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
@@ -95,8 +95,13 @@
                 </table>
             </div>
 
-            <div class="p-3">
-                {{ $permissions->links() }}
+            <div class="pagination-footer mt-2 d-flex flex-column align-items-center gap-1">
+                @if($permissions->hasPages())
+                    <div class="text-muted small">
+                        Mostrando {{ $permissions->firstItem() }}–{{ $permissions->lastItem() }} de {{ $permissions->total() }} permisos
+                    </div>
+                    {{ $permissions->links() }}
+                @endif
             </div>
         </div>
     </div>
@@ -149,7 +154,9 @@
 
     .permission-actions .btn {
         border-radius: 999px;
-        padding-inline: 0.9rem;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        line-height: 1.1;
     }
     .user-filter-card {
         border-radius: 16px;
@@ -169,6 +176,73 @@
     }
 
     .user-filter-card .btn {
-        bord    
+        border-radius: 999px;
+        padding-inline: 0.9rem;
+        font-size: 0.8rem;
+    }
+
+    .pagination-footer {
+        padding: 0.5rem 0.75rem 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+        .permissions-table thead {
+            display: none;
+        }
+
+        .permissions-table tbody {
+            display: block;
+        }
+
+        .permissions-table tbody tr {
+            display: block;
+            margin-bottom: 0.75rem;
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background-color: #ffffff;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+            transform: none !important;
+        }
+
+        .permissions-table tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 0;
+            border-bottom: 0;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+
+        .permissions-table tbody td::before {
+            content: attr(data-label);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+            margin-right: 0.75rem;
+        }
+
+        .permissions-table tbody tr:hover {
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+            background-color: #ffffff !important;
+        }
+
+        .permissions-table tbody td:last-child {
+            padding-top: 0.4rem;
+        }
+
+        .permission-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.4rem;
+        }
+
+        .permission-actions .btn {
+            width: 100%;
+            padding: 0.35rem 0.5rem;
+            font-size: 0.75rem;
+        }
+    }
 </style>
 @endsection

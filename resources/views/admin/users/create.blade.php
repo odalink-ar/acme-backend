@@ -20,12 +20,12 @@
                     'roles' => $roles,
                     'permissions' => $permissions,
                 ])
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between mt-4 pt-2 border-top">
                     <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary">
                         Cancelar
                     </a>
                     <button type="submit" class="btn btn-dark">
-                        Guardar usuario
+                        Guardar
                     </button>
                 </div>
             </form>

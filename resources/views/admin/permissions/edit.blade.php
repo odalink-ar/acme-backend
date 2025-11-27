@@ -6,7 +6,7 @@
 @section('page_subtitle', 'Actualizá el nombre y el guard del permiso')
 
 @section('content')
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 permission-edit-card">
         <div class="card-body">
             <form action="{{ route('admin.permissions.update', $permission) }}" method="POST" class="row g-3">
                 @csrf
@@ -54,4 +54,46 @@
             </form>
         </div>
     </div>
+    <style>
+        .permission-edit-card {
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background-color: #ffffff;
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .permission-edit-card .card-title {
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .permission-edit-card .form-label {
+            font-size: 0.8rem;
+            color: #4b5563;
+            font-weight: 500;
+            margin-bottom: 0.15rem;
+        }
+
+        .permission-edit-card .form-control {
+            border-radius: 999px;
+            border-color: rgba(148, 163, 184, 0.6);
+            font-size: 0.84rem;
+            padding: 0.45rem 1rem;
+        }
+
+        .permission-edit-card .form-control:focus {
+            border-color: #111827;
+            box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.12);
+        }
+
+        .permission-edit-card .btn {
+            border-radius: 999px;
+            font-size: 0.85rem;
+            padding: 0.35rem 1.1rem;
+        }
+    </style>
 @endsection
