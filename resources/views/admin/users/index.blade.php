@@ -223,9 +223,7 @@
     .user-filter-card .btn {
         border-radius: 999px;
     }
-</style>
-<style>
-    .pagination-footer {
+  .pagination-footer {
         padding: 0.5rem 0.75rem 0.75rem;
     }
 
@@ -287,6 +285,6 @@
             padding: 0.35rem 0.5rem;
             font-size: 0.75rem;
         }
-    }
+    }    
 </style>
 @endsection
